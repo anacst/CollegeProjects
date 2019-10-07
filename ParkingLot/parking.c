@@ -3,6 +3,10 @@
 #include "list.h"
 #include "car.h"
 
+int occupied (List* p1, List* p2) {
+	return size(p1) + size(p2);
+}
+
 int parking_full (List* p1, List* p2) {
 	return (p1->size + p2->size >= 15);
 }
@@ -38,6 +42,17 @@ Item* check_in (void) {
 
 void check_out (Car* car) {
 
+
+}
+
+float descount (Car* car, List* p1, List* p2) {
+	if (((occupied(p1, p2) * 15) / 100) >= 25) { 
+		int a = getArrival(car);
+		if (a == 9 || a == 12 || a == 15 || a == 18) {
+			int x = rand() % occupied(p1, p2);
+	
+		}
+	}
 }
 
 List* availability(int departure, List* p1, List *p2) {
@@ -45,11 +60,11 @@ List* availability(int departure, List* p1, List *p2) {
 		return p1;
 	} else if(empty(p2)) {
 		return p2;
-	} else if(!full(p1)) {
-		if(departure <= get_departure(p1->first));
+	} else if(size(p1) < 5) {
+		if(departure <= getDeparture(p1->first));
 			return p1;
-	} else if (!full(p2)) {
-		if(departure >= get_departure(p2->last));
+	} else if (size(p2) < 10) {
+		if(departure >= getDeparture(p2->last));
 			return p2;
 	} else return NULL;
 }
@@ -74,3 +89,5 @@ int rejection(int arrival, int departure, int availability, List* p1, List* p2) 
 
 	return 0;
 }
+
+

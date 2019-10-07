@@ -41,6 +41,10 @@ int empty (List* l) {
 	return (l->size == 0);
 }
 
+int size (List* l) {
+	return l->size;
+}
+
 List* create_list (void) {
 	List* l = (List*) malloc(sizeof(List));
 

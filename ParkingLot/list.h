@@ -10,7 +10,9 @@
     float read_float();
     
     /* Função que determina se lista está vazia */
-    int empty(List*);
+    int empty (List*);
+
+	int size (List*);		
 
     /* Função para inicialização de uma lista */
     List* create_list (void);
