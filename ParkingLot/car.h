@@ -2,11 +2,21 @@ typedef struct car_ Car;
 
 Car* create_car(void);
 
-void setLicense_plate(int license_plate, Car* car);
+void setLicense_plate(int, Car*);
 
-void setArrival(int arrival, Car* car);
+void setArrival(int, Car*);
 
-void setDeparture(int departure, Car* car);
+void setDeparture(int, Car*);
 
-void print_car(Car* car);
+void setDescount(float, Car*);
+
+int getLicense_plate(Car*);
+
+int getArrival(Car*);
+
+int getDeparture(Car*);
+
+float getDescount(Car*);
+
+void print_car(Car*);
 
