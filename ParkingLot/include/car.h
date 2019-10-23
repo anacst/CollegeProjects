@@ -20,3 +20,5 @@ int getArrival(CAR*);
 int getDeparture(CAR*);
 
 float getDescount(CAR*);
+
+float price(CAR* car);

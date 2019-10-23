@@ -36,9 +36,11 @@ bool enqueue(ITEM* x, QUEUE* q) {
 ITEM* dequeue(QUEUE* q) {
   if((q) && !empty_queue(q)) {
     ITEM* tmp = q->front->data;
-    q->front->next = NULL;
-    free(q->front);
+    NODE* aux = q->front;
     q->front = q->front->next;
+    aux->next = NULL;
+    free(aux);
+    aux = NULL;
     q->size--;
     return tmp;
   }
@@ -58,10 +60,15 @@ bool empty_queue(QUEUE* q) {
 }
 
 void print_queue(QUEUE* q) {
-
   for(NODE* p = q->front; p != NULL; p = p->next)
-    printf("\t%d\t2\t\n", getLicense_plate(p->data));
+    printf("\t|  %d   |    2    |    \n", getLicense_plate(p->data));
+}
 
+bool search_queue(int x, QUEUE* q) {
+  for(NODE* p = q->front; p != NULL; p = p->next)
+    if(getLicense_plate(p->data) == x)
+      return 1;
+  return 0;
 }
 
 void destroy_queue(QUEUE** q) {

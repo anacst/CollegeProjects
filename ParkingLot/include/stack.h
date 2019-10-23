@@ -3,7 +3,7 @@
 
   #include <car.h>
   #define bool char
-  #define ERROR 0
+  #define ERROR 1
 
     typedef struct stack_ STACK;
     typedef struct node_ NODE;
@@ -16,6 +16,7 @@
     int size_stack(STACK*);
     bool empty_stack(STACK*);
     void print_stack(STACK*);
+    bool search_stack(int x, STACK* s);
     void destroy_stack(STACK**);
 
 #endif

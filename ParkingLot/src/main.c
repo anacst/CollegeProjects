@@ -5,9 +5,14 @@
 #include <queue.h>
 
 void register_car(STACK* p1, QUEUE* p2) {
-	ITEM* new_car = check_in();
+	ITEM* new_car = check_in(p1, p2);
 	
-	check_out();
+	if (!new_car)
+		return;
+	
+	check_out(new_car, p1, p2);
+
+	descount(new_car, p1, p2);
 	
 	int cond = availability(getDeparture(new_car), p1, p2);
 	
@@ -17,15 +22,15 @@ void register_car(STACK* p1, QUEUE* p2) {
 	if(cond == 1) {
 		int d = push(new_car, p1);
 		if(d)
-			printf("\tCarro adicionado no patio 1(pilha)\n");
+			printf("\n\tNúmero de registros: %d\n", size_stack(p1));
 		else
-			printf("\tErro ao adicionar carro no patio 1(pilha)\n");	
+			printf("\n\tErro ao adicionar carro no patio 1\n");	
 	} else if(cond == 2) {
 		int d = enqueue(new_car, p2);
 		if(d)
-			printf("\tCarro adicionado no patio 2(fila)\n");
+			printf("\n\tNúmero de registros: %d\n", size_queue(p2));
 		else
-			printf("\tErro ao adicionar carro no patio 2(fila)\n");		
+			printf("\n\tErro ao adicionar carro no patio 2\n");		
 	}
 }
 
@@ -50,6 +55,7 @@ void options(int op, STACK* patio_1, QUEUE* patio_2) {
 					break;
 	
 			case 3: end(&patio_1, &patio_2);
+					exit(0);
 					break;
 		}
 
@@ -79,11 +85,9 @@ void menu(STACK* patio_1, QUEUE* patio_2) {
 }
 
 int main(void) {
-
+	
 	STACK* patio_1 = create_stack();
 	QUEUE* patio_2 = create_queue();
 
 	menu(patio_1, patio_2);
-	
-	return 0;
 }

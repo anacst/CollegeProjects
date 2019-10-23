@@ -10,7 +10,7 @@ struct car_ {
 };
 
 CAR* create_car(void) {
-	return malloc(sizeof(CAR));
+	return calloc(1, sizeof(CAR));
 }
 
 void setLicense_plate(int license_plate, CAR* car) {
@@ -44,4 +44,8 @@ int getDeparture(CAR* car) {
 
 float getDescount(CAR* car) {
 	return car->descount;
+}
+
+float price(CAR* car) {
+	return  (3 * (car->departure - car->arrival) * (1 - car->descount));
 }

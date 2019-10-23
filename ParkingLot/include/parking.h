@@ -7,11 +7,9 @@
 	#define MAX1 5
 	#define MAX2 10
 	
-	int read_int();
-	float read_float();
 	int parking_full(STACK*, QUEUE*);
 	int departure_time(int, int);
-	ITEM* check_in(void);
+	ITEM* check_in(STACK*, QUEUE*);
 	void check_out();
 	float descount(CAR*, STACK*, QUEUE*);
 	int availability(int, STACK*, QUEUE*);

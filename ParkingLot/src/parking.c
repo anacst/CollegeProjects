@@ -43,7 +43,7 @@ int departure_time (int arrival, int stay) {
 	return time;
 }
 
-ITEM* check_in (void) {
+ITEM* check_in (STACK* p1, QUEUE* p2) {
 	ITEM* new = create_car();
 
 	printf("\n\n\t\tREGISTRAR CARRO\n\n");
@@ -59,29 +59,79 @@ ITEM* check_in (void) {
 	int stay = read_int();
 	setDeparture(departure_time(arrival, stay), new); 
 
-	/**
-	if(search_item(license_plate) >= 0) {
-		printf("Carro já se encontra no estacionamento!"); 
+	
+	if(search_stack(license_plate, p1) || search_queue(license_plate, p2)) {
+		printf("\n\tCarro já se encontra no estacionamento!"); 
 		return NULL;
 	}
-	**/
 
 	return new;	
 }
 
-void check_out (CAR* car) {
+void check_out (CAR* car, STACK* p1, QUEUE* p2) {
+	CAR* removed;
 
+	if((!empty_stack(p1) && (getArrival(car) >= getDeparture(top(p1)))) || 
+			(!empty_queue(p2) && getArrival(car) >= getDeparture(peek(p2)))) {
+		printf("\n\n\t\tCARROS REMOVIDOS\n");
+		printf("\n\t|  Placa  |  Valor  |\n");
+		printf("\t|-------------------|\n");
+	}
+	
+	while(!empty_stack(p1) && getArrival(car) >= getDeparture(top(p1))) {
+		removed = pop(p1);
+		printf("\t|  %d   |  %.2f   |\n", getLicense_plate(removed), price(removed));
+		free(removed);
+	}
 
+	while(!empty_queue(p2) && getArrival(car) >= getDeparture(peek(p2))) {
+		removed = dequeue(p2);
+		printf("\t|  %d   |  %.2f   |\n", getLicense_plate(removed), price(removed));
+		free(removed);
+	}
 }
 
 float descount (CAR* car, STACK* p1, QUEUE* p2) {
-	if (((occupied(p1, p2) * 15) / 100) >= 25) { 
-		int a = getArrival(car);
-		if (a == 9 || a == 12 || a == 15 || a == 18) {
-			int x = rand() % occupied(p1, p2);
+	if (((occupied(p1, p2) * 15) / 100) >= 25)
+		return 0;
 
-		}
-	}
+    CAR* list[15];
+    CAR* aux_car;
+    STACK *aux_stack = create_stack();
+    int i = 0;
+    int a = getArrival(car);
+    int x = rand() % 5;
+    int o = occupied(p1, p2);  //ao usar % para sortear o carro, não é necessário tratar a fila como circular
+    int ps = size_stack(p1);
+    int pq = size_queue(p2);
+
+    printf("\n\n%d %d\n\n", ps, pq);
+
+    //colocando carros do estacionamento PILHA na lista:
+    while(!empty_stack(p1)) {
+    	aux_car = pop(p1);
+    	push(aux_car, aux_stack);
+    	list[i] = aux_car;
+    	i++;
+    }
+  
+    while(!empty_stack(aux_stack)) //reempilhando
+        push(pop(aux_stack), p1);
+    
+
+    //colocando carros do estacionamento FILA na lista:
+    while(!empty_queue(p2)) {
+        aux_car = dequeue(p2);
+        enqueue(aux_car, p2); //tira o carro do inicio da fila e devolve ele para o fim
+        list[i] = aux_car;
+        i++;
+    }
+
+	if (a == 9 || a == 12 || a == 15 || a == 18)
+     	setDescount(0.1, list[x]);
+
+	printf("O carro %s foi sorteado!", getLicense_plate(list[x]));
+	destroy_stack(&aux_stack);
 }
 
 int availability(int departure, STACK* p1, QUEUE* p2) {
@@ -105,19 +155,19 @@ int availability(int departure, STACK* p1, QUEUE* p2) {
 
 int rejection(int arrival, int departure, int availability, STACK* p1, QUEUE* p2) {
 	if(parking_full(p1, p2)) {
-		printf("Estacionamento está cheio.");	
+		printf("\n\tEstacionamento está cheio.\n");	
 		return 1;
 	}
 	if(arrival < 8 || arrival > 22) {
-		printf("Estacionamento está fechado.\n");
+		printf("\n\tEstacionamento está fechado.\n");
 		return 1;
 	}
 	if(departure < 8 || departure > 22) {
-		printf("Estacionamento estará fechado no horário previsto de saída.\n");
+		printf("\n\tEstacionamento estará fechado no horário previsto de saída.\n");
 		return 1;
 	}
 	if(!availability) {
-		printf("Condições de disponibilidade não foram satisfeitas.\n");
+		printf("\n\tCondições de disponibilidade não foram satisfeitas.\n");
 		return 1;
 	}
 
@@ -127,7 +177,8 @@ int rejection(int arrival, int departure, int availability, STACK* p1, QUEUE* p2
 void print(STACK* p1, QUEUE* p2) {
 
 	printf("\n\n\t\tCARROS REGISTRADOS\n\n");
-	printf("\tPlaca| Pátio | Valor\n");
+	printf("\t|  Placa  |  Pátio  |  Valor  |\n");
+	printf("\t|-----------------------------|\n");
 	print_stack(p1);
 	print_queue(p2);
 }
