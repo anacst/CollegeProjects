@@ -56,7 +56,7 @@ bool empty_stack(STACK* s) {
 
 void print_stack(STACK* s) {
   for(NODE* p = s->top; p != NULL; p = p->prev)
-     printf("\t|  %d   |    1    |    \n", getLicense_plate(p->data));
+     printf("\t|  %d   |    1    |  %.2f   |\n", getLicense_plate(p->data), getPrice(p->data));
 }
 
 bool search_stack(int x, STACK* s) {

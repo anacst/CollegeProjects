@@ -61,7 +61,7 @@ bool empty_queue(QUEUE* q) {
 
 void print_queue(QUEUE* q) {
   for(NODE* p = q->front; p != NULL; p = p->next)
-    printf("\t|  %d   |    2    |    \n", getLicense_plate(p->data));
+    printf("\t|  %d   |    2    |  %.2f   |\n", getLicense_plate(p->data), getPrice(p->data));
 }
 
 bool search_queue(int x, QUEUE* q) {

@@ -10,7 +10,7 @@ run: prog
 	./prog
 
 prog: parking.o stack.o queue.o car.o
-	$(CC) -o prog $(SRC)/main.c $(OBJ)/parking.o $(OBJ)/stack.o $(OBJ)/queue.o $(OBJ)/car.o -I$(INCLUDE) -Wall -g -fsanitize=address
+	$(CC) -o prog $(SRC)/main.c $(OBJ)/parking.o $(OBJ)/stack.o $(OBJ)/queue.o $(OBJ)/car.o -I$(INCLUDE) -Wall -g
 
 parking.o:
 	$(CC) -g -c $(SRC)/parking.c -I./$(INCLUDE) -o $(OBJ)/parking.o

@@ -80,57 +80,52 @@ void check_out (CAR* car, STACK* p1, QUEUE* p2) {
 	
 	while(!empty_stack(p1) && getArrival(car) >= getDeparture(top(p1))) {
 		removed = pop(p1);
-		printf("\t|  %d   |  %.2f   |\n", getLicense_plate(removed), price(removed));
+		printf("\t|  %d   |  %.2f   |\n", getLicense_plate(removed), getPrice(removed));
 		free(removed);
 	}
 
 	while(!empty_queue(p2) && getArrival(car) >= getDeparture(peek(p2))) {
 		removed = dequeue(p2);
-		printf("\t|  %d   |  %.2f   |\n", getLicense_plate(removed), price(removed));
+		printf("\t|  %d   |  %.2f   |\n", getLicense_plate(removed), getPrice(removed));
 		free(removed);
 	}
 }
 
-float descount (CAR* car, STACK* p1, QUEUE* p2) {
-	if (((occupied(p1, p2) * 15) / 100) >= 25)
+float descount (CAR* car, STACK* p1, QUEUE* p2, int size) {
+
+	if (((size * 100) / 15) < 25)
 		return 0;
 
-    CAR* list[15];
-    CAR* aux_car;
+    CAR* cars[15];
     STACK *aux_stack = create_stack();
+    CAR* aux;
     int i = 0;
     int a = getArrival(car);
-    int x = rand() % 5;
-    int o = occupied(p1, p2);  //ao usar % para sortear o carro, não é necessário tratar a fila como circular
-    int ps = size_stack(p1);
-    int pq = size_queue(p2);
-
-    printf("\n\n%d %d\n\n", ps, pq);
+    int x = rand() % size; //ao usar % para sortear o carro, não é necessário tratar a fila como circular
+    printf("%d\n", x);
 
     //colocando carros do estacionamento PILHA na lista:
     while(!empty_stack(p1)) {
-    	aux_car = pop(p1);
-    	push(aux_car, aux_stack);
-    	list[i] = aux_car;
-    	i++;
-    }
+    	aux = pop(p1);
+    	cars[i++] = aux;
+    	push(aux, aux_stack);
+    }                
   
     while(!empty_stack(aux_stack)) //reempilhando
         push(pop(aux_stack), p1);
     
 
     //colocando carros do estacionamento FILA na lista:
-    while(!empty_queue(p2)) {
-        aux_car = dequeue(p2);
-        enqueue(aux_car, p2); //tira o carro do inicio da fila e devolve ele para o fim
-        list[i] = aux_car;
-        i++;
+    while(i < size) {
+        aux = dequeue(p2);
+        enqueue(aux, p2); //tira o carro do inicio da fila e devolve ele para o fim
+        cars[i++] = aux;
     }
 
 	if (a == 9 || a == 12 || a == 15 || a == 18)
-     	setDescount(0.1, list[x]);
+     	setDescount((0.1 * getPrice(aux)), aux);
 
-	printf("O carro %s foi sorteado!", getLicense_plate(list[x]));
+	printf("\n\tO carro %d foi sorteado!\n", getLicense_plate(cars[x]));
 	destroy_stack(&aux_stack);
 }
 

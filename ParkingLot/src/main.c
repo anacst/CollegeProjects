@@ -12,7 +12,7 @@ void register_car(STACK* p1, QUEUE* p2) {
 	
 	check_out(new_car, p1, p2);
 
-	descount(new_car, p1, p2);
+	descount(new_car, p1, p2, (size_stack(p1)+size_queue(p2)));
 	
 	int cond = availability(getDeparture(new_car), p1, p2);
 	

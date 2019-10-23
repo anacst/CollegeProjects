@@ -10,8 +10,8 @@
 	int parking_full(STACK*, QUEUE*);
 	int departure_time(int, int);
 	ITEM* check_in(STACK*, QUEUE*);
-	void check_out();
-	float descount(CAR*, STACK*, QUEUE*);
+	void check_out(CAR*, STACK*, QUEUE*);
+	float descount(CAR*, STACK*, QUEUE*, int);
 	int availability(int, STACK*, QUEUE*);
 	int rejection(int, int, int, STACK*, QUEUE*);
 	void print(STACK* p1, QUEUE* p2);

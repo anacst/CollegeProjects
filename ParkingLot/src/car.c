@@ -46,6 +46,6 @@ float getDescount(CAR* car) {
 	return car->descount;
 }
 
-float price(CAR* car) {
-	return  (3 * (car->departure - car->arrival) * (1 - car->descount));
+float getPrice(CAR* car) {
+	return  ((3 * (car->departure - car->arrival)) - car->descount);
 }
