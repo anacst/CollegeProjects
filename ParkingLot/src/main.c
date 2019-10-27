@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <parking.h>
 #include <stack.h>
 #include <queue.h>
@@ -19,19 +20,10 @@ void register_car(STACK* p1, QUEUE* p2) {
 	if(rejection(getArrival(new_car), getDeparture(new_car), cond, p1, p2))
 		return;
 
-	if(cond == 1) {
-		int d = push(new_car, p1);
-		if(d)
-			printf("\n\tNúmero de registros: %d\n", size_stack(p1));
-		else
-			printf("\n\tErro ao adicionar carro no patio 1\n");	
-	} else if(cond == 2) {
-		int d = enqueue(new_car, p2);
-		if(d)
-			printf("\n\tNúmero de registros: %d\n", size_queue(p2));
-		else
-			printf("\n\tErro ao adicionar carro no patio 2\n");		
-	}
+	if(cond == 1)
+		push(new_car, p1);
+	else if(cond == 2)
+		enqueue(new_car, p2);
 }
 
 void print_cars(STACK* p1, QUEUE* p2) {

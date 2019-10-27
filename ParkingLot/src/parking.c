@@ -74,9 +74,10 @@ void check_out (CAR* car, STACK* p1, QUEUE* p2) {
 	if((!empty_stack(p1) && (getArrival(car) >= getDeparture(top(p1)))) || 
 			(!empty_queue(p2) && getArrival(car) >= getDeparture(peek(p2)))) {
 		printf("\n\n\t\tCARROS REMOVIDOS\n");
-		printf("\n\t|  Placa  |  Valor  |\n");
 		printf("\t|-------------------|\n");
-	}
+		printf("\t|  Placa  |  Valor  |\n");
+		printf("\t|-------------------|\n");
+	} else return;
 	
 	while(!empty_stack(p1) && getArrival(car) >= getDeparture(top(p1))) {
 		removed = pop(p1);
@@ -89,6 +90,8 @@ void check_out (CAR* car, STACK* p1, QUEUE* p2) {
 		printf("\t|  %d   |  %.2f   |\n", getLicense_plate(removed), getPrice(removed));
 		free(removed);
 	}
+
+	printf("\t|-------------------|\n");
 }
 
 float descount (CAR* car, STACK* p1, QUEUE* p2, int size) {
@@ -172,8 +175,10 @@ int rejection(int arrival, int departure, int availability, STACK* p1, QUEUE* p2
 void print(STACK* p1, QUEUE* p2) {
 
 	printf("\n\n\t\tCARROS REGISTRADOS\n\n");
+	printf("\t|-----------------------------|\n");
 	printf("\t|  Placa  |  Pátio  |  Valor  |\n");
 	printf("\t|-----------------------------|\n");
 	print_stack(p1);
 	print_queue(p2);
+	printf("\t|-----------------------------|\n");
 }

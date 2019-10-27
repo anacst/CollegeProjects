@@ -25,6 +25,9 @@ struct node {
 	Node* next;
 	Node* next_prior;
 	Node* next_schedule;
+	Node* prev;
+	Node* prev_prior;
+	Node* prev_schedule;
 };
 
 struct list {
@@ -35,8 +38,9 @@ struct list {
 	int size;
 };
 
-void erase_node (Node* n) {
-	free(n);
+void erase_node (Node** n) {
+	free(*n);
+	*n = NULL;
 }
 
 List* create_list (void) {
@@ -56,8 +60,8 @@ void erase_list (List** l) {
 	while (n != (*l)->end) {
 		if(n->next != NULL) {
 			p = n; n = n->next;
-			erase_node(p);
-		}	
+			erase_node(&p);
+		}
 	}
 	(*l)->start = NULL;
 	(*l)->first_prior = NULL;
@@ -68,7 +72,7 @@ void erase_list (List** l) {
 
 Node* prior_partition (Node* start, Node* end, Node** newStart, Node** newEnd) {
 	Node* pivot = end;
-	Node* current = start;	
+	Node* current = start;
 	Node* prev = NULL;
 	Node* tail = pivot;
 
@@ -87,18 +91,18 @@ Node* prior_partition (Node* start, Node* end, Node** newStart, Node** newEnd) {
 			current = tmp;
 		}
 	}
-	
+
 	//Se o pivot é o maior elemento, ele se torna o primeiro
-	if ((*newStart) == NULL) 
+	if ((*newStart) == NULL)
 		(*newStart) = pivot;
 
 	//(?)Atualizamos o último elemento
 	(*newEnd) = tail;
 
-	return pivot; 
+	return pivot;
 }
 
-Node* recursive_sort_prior (Node* start, Node* end) {
+Node* recursive_sort_prior(Node* start, Node* end) {
 	//Caso base
 	if (!start || start == end) return start;
 
@@ -119,7 +123,7 @@ Node* recursive_sort_prior (Node* start, Node* end) {
 
 		//Connect last element of the left ordered sublist with the rest of list
 		tmp = newEnd;
-		tmp->next_prior = pivot; 
+		tmp->next_prior = pivot;
 	}
 
 	//Recur for the sublist after the pivot
@@ -166,42 +170,52 @@ Node* search_schedule(int old_hh, int old_mm, int old_ss, List* process_list) {
 
 void add_process (List* process_list) {
 	Node* new = (Node*) malloc(sizeof(Node));
-		
-	if(!process_list->size) { 
+
+	if(!process_list->size) {
 		process_list->start = new;
 		process_list->first_prior = new;
 		process_list->first_schedule = new;
+	} else {
+		process_list->end->next = new;
 	}
 	scanf("%d", &(new->process.prior));
 	scanf("%d:%d:%d", &(new->process.arrival.hh), &(new->process.arrival.mm), &(new->process.arrival.ss));
 	scanf("%s", new->process.description);
-	new->next = NULL;
+	new->prev = process_list->end;
 	process_list->end = new;
-	process_list->size++;	
-
-	Process p = process_list->start->process;
-  	printf("%d %d:%d:%d %s\n", p.prior, p.arrival.hh, p.arrival.mm, p.arrival.ss, p.description);	
+	new->next = NULL;
+	process_list->size++;
+	
+//	sort_prior(process_list);
 }
 
 void exec_process (List* process_list) {
 	char op;
 	Node* n;
-	scanf("-%c", &op);
+	scanf(" -%c", &op);
 	if(!process_list->size) return;
-	
+
 	switch (op) {
 
-		case 'p': sort_prior(process_list);
+		case 'p': //sort_prior(process_list);
 			  n = process_list->first_prior;
 			  process_list->first_prior = n->next_prior;
-			  erase_node(n);
-			  process_list->size--;	
+			  n->prev->next = n->next;
+			  n->next->prev = n->prev;
+			  n->prev_schedule->next_schedule = n->next_schedule;
+			  n->next_schedule->prev_schedule = n->prev_schedule;
+			  erase_node(&n);
+			  process_list->size--;
 			  break;
 
-		case 't': sort_prior(process_list);
+		case 't': //sort_prior(process_list);
 			  n = process_list->first_schedule;
 			  process_list->first_schedule = n->next_schedule;
-			  erase_node(n);
+			  n->prev->next = n->next;
+			  n->next->prev = n->prev;
+			  n->prev_prior->next_prior = n->next_prior;
+			  n->next_prior->prev_prior = n->prev_prior;
+			  erase_node(&n);
 			  process_list->size--;
 			  break;
 
@@ -211,13 +225,12 @@ void exec_process (List* process_list) {
 void next_process (List* process_list) {
 	char op;
 	Process p;
-	scanf("-%c", &op);
+	scanf(" -%c", &op);
 	if (!process_list->size) return;
 
 	switch (op) {
 
-		case 'p': sort_prior(process_list);
-			  p = process_list->first_prior->process;
+		case 'p': p = process_list->first_prior->process;
 			  printf("%d %d:%d:%d %s\n", p.prior, p.arrival.hh, p.arrival.mm, p.arrival.ss, p.description);
 			  break;
 
@@ -233,8 +246,8 @@ void change_process (List* process_list) {
 	Node* n;
 	int old_prior, new_prior;
 	int old_hh, old_mm, old_ss, new_hh, new_mm, new_ss;
-	scanf("-%c", &op);
-	
+	scanf(" -%c", &op);
+
 	switch (op) {
 
 		case 'p': scanf("%d|%d", &old_prior, &new_prior);
@@ -251,24 +264,25 @@ void change_process (List* process_list) {
 
 	}
 
+	sort_prior(process_list);
 }
 
 void print_process (List* process_list) {
 	char op;
 	Process *p;
-	scanf("-%c", &op);
+	scanf(" -%c", &op);
 
 	switch (op) {
 
 		case 'p': for (Node *n = process_list->first_prior; n != NULL; n = n->next_prior) {
 				  p = &n->process;
-				  printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);	
+				  printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);
 			  }
 			  break;
 
 		case 't': for (Node *n = process_list->first_schedule; n != NULL; n = n->next_schedule) {
 				  p = &n->process;
-				  printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);	
+				  printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);
 			  }
 			  break;
 
@@ -281,22 +295,22 @@ void quit (List* l) {
 
 void print (List* l) {
 	Process *p;
-	for (Node* n = l->first_prior; n != NULL; n = n->next_prior) {
+	for (Node* n = l->start; n != NULL; n = n->next) {
 		p = &n->process;
-  		printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);	
-	} 
+  		printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);
+	}
 }
 
 void start () {
 	char command[8];
-	List* process_list = create_list();	
+	List* process_list = create_list();
 
 	do {
 
 		scanf("%s", command);
-	
-		if (strcmp(command, "add") == 0) add_process(process_list);
-		else if (!strcmp(command, "exec")) exec_process(process_list); 
+
+		if (!strcmp(command, "add")) add_process(process_list);
+		else if (!strcmp(command, "exec")) exec_process(process_list);
 		else if (!strcmp(command, "next")) next_process(process_list);
 		else if (!strcmp(command, "change")) change_process(process_list);
 		else if (!strcmp(command, "print")) print(process_list);
@@ -311,7 +325,7 @@ void start () {
 }
 
 int main(void) {
-	
+
 	start();
 	return 0;
 }
