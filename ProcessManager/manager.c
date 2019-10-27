@@ -90,7 +90,7 @@ Node* search_schedule(int hh, int mm, int ss, List* process_list) {
 	return ptr;
 }
 
-NODE* search_prior(int prior, List* process_list) {
+Node* search_prior(int prior, List* process_list) {
 	Node* ptr = process_list->head_prior;
 
 	while(ptr != NULL && ptr->process->prior != prior)
@@ -99,7 +99,7 @@ NODE* search_prior(int prior, List* process_list) {
 	return ptr;
 }
 
-void add_process (List* process_list) {
+void add_process(List* process_list) {
 	Node* new_node = (Node*) calloc(1, sizeof(Node));
 
 	scanf("%d", &(new_node->process->prior));
@@ -125,22 +125,22 @@ void add_process (List* process_list) {
 
 
 	if(ptr == process_list->head_prior)
-		process_list->head =  new_node;
+		process_list->head_prior = new_node;
 
 	//Inserção ordenada por tempo
     ptr = process_list->head_schedule;
     if(!process_list->head_schedule)
 		process_list->head_schedule = new_node;
 
-    while(ptr != NULL && ptr->process->arrival.hh <= process_list->arrival.hh)
+    while(ptr != NULL && ptr->process->arrival.hh <= new_node->process->arrival.hh)
         ptr = ptr->next_schedule;
 
-    if(ptr->process->arrival.hh == process_list->arrival.hh) {
-        while(ptr != NULL && ptr->process->arrival.mm <= process_list->arrival.mm)
+    if(ptr->process->arrival.hh == new_node->process->arrival.hh) {
+        while(ptr != NULL && ptr->process->arrival.mm <= new_node->process->arrival.mm)
             ptr = ptr->next_schedule;
 
-        if(ptr->process->arrival.mm == process_list->arrival.mm) {
-            while(ptr != NULL && ptr->process->arrival.ss < process_list->arrival.ss)
+        if(ptr->process->arrival.mm == new_node->process->arrival.mm) {
+            while(ptr != NULL && ptr->process->arrival.ss < new_node->process->arrival.ss)
                 ptr = ptr->next_schedule;
 
         }
@@ -188,18 +188,18 @@ void exec_process(List* process_list) {
 
 void next_process(List* process_list) {
 	char op;
-	Process p;
+	Process* p;
 	scanf(" -%c", &op);
 	if (!process_list->size) return;
 
 	switch (op) {
 
 		case 'p': p = process_list->head_prior->process;
-			  	  printf("%d %d:%d:%d %s\n", p.prior, p.arrival.hh, p.arrival.mm, p.arrival.ss, p.description);
+			  	  printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);
 				  break;
 
 		case 't': p = process_list->head_schedule->process;
-			  	  printf("%d %d:%d:%d %s\n", p.prior, p.arrival.hh, p.arrival.mm, p.arrival.ss, p.description);
+			  	  printf("%d %d:%d:%d %s\n", p->prior, p->arrival.hh, p->arrival.mm, p->arrival.ss, p->description);
 				  break;
 
 	}
@@ -216,7 +216,7 @@ void change_process(List* process_list) {
 
 		case 'p': scanf("%d|%d", &old_prior, &new_prior);
 				  n = search_prior(old_prior, process_list);
-				  n->process->arrival;
+				  n->process->prior = new_prior;
 				  //sort_prior(process_list);
 			  	  break;
 
