@@ -53,22 +53,7 @@ List* create_list (void) {
 	return new;
 }
 
-void erase_list (List** l) {
-	Node* p = NULL;
-	Node* n = (*l)->start;
-	if(*l == NULL) return;
-	while (n != (*l)->end) {
-		if(n->next != NULL) {
-			p = n; n = n->next;
-			erase_node(&p);
-		}
-	}
-	(*l)->start = NULL;
-	(*l)->first_prior = NULL;
-	(*l)->first_schedule = NULL;
-	free(*l);
-	(*l) = NULL;
-}
+
 
 Node* prior_partition (Node* start, Node* end, Node** newStart, Node** newEnd) {
 	Node* pivot = end;
@@ -178,14 +163,14 @@ void add_process (List* process_list) {
 	} else {
 		process_list->end->next = new;
 	}
-	scanf("%d", &(new->process.prior));
-	scanf("%d:%d:%d", &(new->process.arrival.hh), &(new->process.arrival.mm), &(new->process.arrival.ss));
-	scanf("%s", new->process.description);
+	scanf("%d", &(new->process->prior));
+	scanf("%d:%d:%d", &(new->process->arrival.hh), &(new->process->arrival.mm), &(new->process->arrival.ss));
+	scanf("%s", new->process->description);
 	new->prev = process_list->end;
 	process_list->end = new;
 	new->next = NULL;
 	process_list->size++;
-	
+
 //	sort_prior(process_list);
 }
 
