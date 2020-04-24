@@ -44,16 +44,16 @@ int main(int argc, char const *argv[])
     // insere os valores nas 5 estruturas
     inicia_tempo();
     c_ordenado = cria_colecao(LISTA_ORDENADO);
-    for (int i = 0; i < N; i++) 
+    for (int i = 0; i < N; i++)
         adiciona(c_ordenado, insercao[i]);
     tempo_insere_ordenado = finaliza_tempo();
-    
+
     inicia_tempo();
     c_ultimo  = cria_colecao(LISTA_ULTIMO);
     for (int i = 0; i < N; i++)
         adiciona(c_ultimo, insercao[i]);
     tempo_insere_ultimo = finaliza_tempo();
-    
+
     inicia_tempo();
     c_primeiro = cria_colecao(LISTA_PRIMEIRO);
     for (int i = 0; i < N; i++)
@@ -65,7 +65,7 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N; i++)
         adiciona(c_binaria, insercao[i]);
     tempo_insere_binaria = finaliza_tempo();
-    
+
     inicia_tempo();
     c_avl = cria_colecao(ARVORE_AVL);
     for (int i = 0; i < N; i++)
@@ -78,12 +78,12 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N; i++)
         encontrado_ordenado += existe(c_ordenado, busca[i]);
     tempo_busca_ordenado = finaliza_tempo();
-    
+
     inicia_tempo();
     for (int i = 0; i < N; i++)
         encontrado_ultimo += existe(c_ultimo, busca[i]);
     tempo_busca_ultimo = finaliza_tempo();
-    
+
     inicia_tempo();
     for (int i = 0; i < N; i++)
         encontrado_primeiro += existe(c_primeiro, busca[i]);
@@ -93,7 +93,7 @@ int main(int argc, char const *argv[])
     for (int i = 0; i < N; i++)
         encontrado_binaria += existe(c_binaria, busca[i]);
     tempo_busca_binaria = finaliza_tempo();
-    
+
     inicia_tempo();
     for (int i = 0; i < N; i++)
         encontrado_avl += existe(c_avl, busca[i]);

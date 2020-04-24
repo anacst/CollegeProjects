@@ -37,7 +37,7 @@ void end(STACK** p1, QUEUE** p2) {
 
 void options(int op, STACK* patio_1, QUEUE* patio_2) {
 
-	void menu(STACK* patio_1, QUEUE* patio_2);
+	menu(STACK* patio_1, QUEUE* patio_2);
 
 		switch(op) {
 			case 1: register_car(patio_1, patio_2);

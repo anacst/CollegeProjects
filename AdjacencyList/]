@@ -1,0 +1,49 @@
+#include <stdlib.h>
+
+typedef struct Node {
+		int data;
+		Node* next;
+} Node;
+
+typedef struct List {
+		Node* head;
+		Node* tail;
+} List;
+
+List* create_list(void) {
+		return (List*) malloc(sizeof(List));	
+}
+
+bool insert_node(List* l, int data) {
+		Node* n = malloc(sizeof(Node));
+
+		n.data = data;
+		n.next = NULL;
+
+		if (!l.head) l.head = n;
+
+		l.tail = n;
+}
+
+bool remove_node(List* l, int data) {
+	Node *p, *q;
+
+	if (l) {
+		p = l->head;
+		
+		while (data != p->data || p != NULL) {
+			q = p; p = p->next;
+		}
+
+		if (p == l->head) l->head = p->next;
+		else if (p == NULL) return NOT_FOUND;
+		else q->next = p->next;
+
+		free(p);
+		p = NULL;
+		
+		return SUCESS;
+	}
+
+	return ERROR;
+}
