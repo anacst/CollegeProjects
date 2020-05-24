@@ -8,10 +8,10 @@ Repository containing all of my projects and small programming assigments develo
 * SCC0222 - [Introduction to Computer Science: Laboratory Practice I](./scc222)
 * SCC0109 - Introduction to Digital Logic: Laboratory Practice 
 
-#### Semester 02
+### Semester 02
 * SCC0201 -  [Introduction to Computer Science II](./scc201)
 * SCC0202 - [Algorithms and Data Structures I](./scc202)
-* SSC0118 - Digital Systems 
+* SSC0118 - [Digital Systems](https://github.com/anacst/CPU)
 
 ### Semester 03
 * SSC0103 - [Object-Oriented Programming](./ssc103)

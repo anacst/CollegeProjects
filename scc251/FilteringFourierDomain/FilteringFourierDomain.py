@@ -1,3 +1,4 @@
+import matplotlib.pyplot as plt
 import numpy as np
 import imageio
 
@@ -6,13 +7,11 @@ def DFT2D(f):
     F = np.zeros(f.shape, dtype=np.complex64)
     n,m = f.shape[0:2]
     
-    # creating indices for x, to compute multiplication using numpy (f*exp)
-    x = np.arange(n)
-    # for each frequency 'u,v'
+    x = np.arange(n).reshape(n,1)
+    y = np.arange(m).reshape(1,m)
     for u in np.arange(n):
         for v in np.arange(m):
-            for y in np.arange(m):
-                F[u,v] += np.sum(f[:,y] * np.exp( (1j*2*np.pi) * (((u*x)/n)+((v*y)/m)) ))
+            F[u,v] += np.sum(f * np.exp( (-1j*2*np.pi) * (((u*x)/n)+((v*y)/m)) ))
                 
     return F/np.sqrt(n*m)
 
@@ -21,13 +20,13 @@ def IDFT2D(f):
     F = np.zeros(f.shape, dtype=np.complex64)
     n,m = f.shape[0:2]
     
-    # creating indices for x, to compute multiplication using numpy (f*exp)
-    x = np.arange(n)
+    x = np.arange(n).reshape(n,1)
+    y = np.arange(m).reshape(1,m)
     # for each frequency 'u,v'
     for u in np.arange(n):
         for v in np.arange(m):
-            for y in np.arange(m):
-                F[u,v] += np.sum(f[:,y] * np.exp( (1j*2*np.pi) * (((u*x)/n)+((v*y)/m)) ))
+            #for y in np.arange(m):
+            F[u,v] += np.sum(f * np.exp( (1j*2*np.pi) * (((u*x)/n)+((v*y)/m)) ))
                 
     return F/np.sqrt(n*m)
 
@@ -40,7 +39,10 @@ T = float(input())
 n,m = img.shape
 
 # compute fourier transform of the image
-F = np.fft.fft2(img)/np.sqrt(n*m)
+F = DFT2D(img)
+# F = np.fft.fft2(img)/np.sqrt(n*m)
+
+#plt.imshow(F)
 
 # finding maximum coefficient (not counting the [0,0])
 p2 = np.abs(F[0,1])

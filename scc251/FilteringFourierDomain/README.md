@@ -13,23 +13,23 @@ Implement a function that takes as input an image and a threshold value 0 < T <=
 4. Compute the Inverse Fourier Transform of the filtered version of F (after step 3 above)
 5. Print on the screen the following information: p2\*T, the number of coefficients below the threshold, the original mean of the image and the mean of the image after processing, using the following format:
 
-'''python
+```python
 Threshold=%.4f
 Filtered Coefficients=%d
 Original Mean=%.2f
 New Mean=%.2f
-'''
+```
 
 **Input example:**
-'''
+```
 images/gradient_noise_small.png
 0.05
-'''
+```
 
 **Output example:**
-'''
+```
 Threshold=28.3364
 Filtered Coefficients=961
 Original Mean=116.06
 New Mean=116.06
-'''
+```
