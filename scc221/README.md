@@ -1,6 +1,5 @@
 ## SCC0221 - *Introduction to Computer Science I*
-* Project 1: Memorizando Sequências 
-  
+* Project 1: Memorizando Sequências -
   [Descrição]() | 
   [Código]() 
 * Project 2: Funções, Vetores e Matrizes Pro
